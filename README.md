@@ -7,6 +7,6 @@
 
 百度智能云：https://cloud.baidu.com
 
-springboot脚手架：start.aliyun.com
+springboot脚手架：https://start.aliyun.com
 
 element UI ：https://element.eleme.io/#/zh-CN/component
