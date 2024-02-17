@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI identify</title>
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<!--element UI组件-->
+<div id="app">
+    <h1>普通文字识别</h1>
+    <el-upload
+            class="upload-demo"
+            action="/pic"
+            :on-success="picSuccess">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传图片文件，且不超过500kb</div>
+    </el-upload>
+    <el-input
+            type="textarea"
+            :rows="7"
+            placeholder="识别图片的文字"
+            v-model="picWords">
+    </el-input>
+    <h1>动物照片识别</h1>
+    <el-upload
+            class="upload-demo"
+            action="/ani"
+            :on-success="aniSuccess">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传图片文件，且不超过500kb</div>
+    </el-upload>
+    <el-input
+            type="textarea"
+            :rows="7"
+            placeholder="识别图片的动物"
+            v-model="aniWords">
+    </el-input>
+
+    <h1>NLP 文本纠错</h1>
+    <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="输入文本"
+            v-model="nlp_input">
+    </el-input>
+    <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="输出纠错文本"
+            v-model="nlp_output">
+    </el-input>
+    <el-button type="primary" round @click = "nlp_correction">纠错</el-button>
+</div>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.2/axios.min.js"></script>
+<!--javascript的代码如下-->
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            picWords: '', aniWords: '', nlp_input: '', nlp_output: '',
+        },
+        methods: {
+            <!--这里的res是一个形参，表示后端返回的响应对象（response object）-->
+            picSuccess(res, file) {
+                console.log(res);
+                console.log(file);
+                this.picWords = res;
+            },
+            aniSuccess(res, file) {
+                console.log(res.data);
+                console.log(file);
+                this.aniWords = res;
+            },
+            nlp_correction() {
+                axios.get("http://127.0.0.1:8080/nlp", {
+                    params: {
+                        text: this.nlp_input,
+                    }
+                }).then(res => {
+                    this.nlp_output = res.data;
+                    console.log(res.data);
+                })
+            }
+        }
+    })
+</script>
+</html>
